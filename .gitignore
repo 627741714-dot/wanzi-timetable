@@ -1,0 +1,19 @@
+# 只忽略临时/生成物，交付文件（index.html 等）必须进仓库
+
+# 截图脚本与 CDP 用的临时目录
+.shots/
+.shots-dbg/
+.edge-profile*/
+
+# 一次性调试脚本
+.dbg-*.mjs
+.reverse-check.mjs
+.refcheck.mjs
+.recover.mjs
+.repair.mjs
+.fix-encoding.mjs
+
+# 编辑器 / 系统
+Thumbs.db
+desktop.ini
+.DS_Store

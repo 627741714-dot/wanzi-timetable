@@ -1,0 +1,1003 @@
+/* ===========================================================================
+ * style.css —— 4 套配色 × 3 套字体（全部可以在页面里自己切）
+ *
+ * 布局要点：
+ *   格子用【百分比】定位（--top / --h），所以时间轴一改字号、一改高度也不会错位。
+ *   时间轴高度 = --hourH × 12.92；字号缩放用 --fs 控制格子里的文字。
+ *
+ * 踩过的坑：[hidden] 必须写 !important，否则 .sheet{display:flex} 这类作者样式
+ *   会盖掉浏览器默认的 display:none，弹层关不掉。
+ * ===========================================================================
+ */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================== 4 套配色 ============================== */
+
+/* ① 纸感 · 墨色 —— 像一本手写笔记 */
+html[data-theme="paper"] {
+  --page-bg: #e7ded1;
+  --app-bg: #fbf6ee;
+  --app-bg-2: #f3ece1;
+  --ink: #2f2a25;
+  --ink-2: #6b6156;
+  --ink-3: #9a8f81;
+  --line: #e2d7c7;
+  --line-2: #cfc0ab;
+  --card: #ffffff;
+  --card-2: #fdfaf5;
+  --accent: #b4553a;
+  --accent-ink: #ffffff;
+  --now: #b4553a;
+  --block-bg: 36% 44%;
+  --block-line-alpha: .52;
+  --head-bg: #f6efe4;
+  --shadow-app: 0 18px 60px rgba(80, 60, 40, .22);
+  --shadow-block: 0 1px 2px rgba(90, 70, 50, .10);
+  --radius: 14px;
+  --radius-block: 9px;
+  --radius-chip: 999px;
+  --theme-color: #f3ece1;
+}
+/* ② 午夜 · 霓虹 —— 夜里看不刺眼 */
+html[data-theme="midnight"] {
+  --page-bg: #08090f;
+  --app-bg: #101320;
+  --app-bg-2: #0b0e19;
+  --ink: #e8ecff;
+  --ink-2: #9aa4c8;
+  --ink-3: #656e8f;
+  --line: #232a44;
+  --line-2: #313a5c;
+  --card: #171c2e;
+  --card-2: #141829;
+  --accent: #4ea8ff;
+  --accent-ink: #04121f;
+  --now: #ff5c8a;
+  --block-bg: 46% 26%;
+  --block-line-alpha: .85;
+  --head-bg: #151a2b;
+  --shadow-app: 0 18px 60px rgba(0, 0, 0, .6);
+  --shadow-block: 0 1px 0 rgba(255, 255, 255, .05), 0 6px 18px rgba(0, 0, 0, .35);
+  --radius: 16px;
+  --radius-block: 10px;
+  --radius-chip: 999px;
+  --theme-color: #101320;
+}
+/* ③ 北欧 · 灰白 —— 干净冷淡 */
+html[data-theme="nord"] {
+  --page-bg: #dfe4ea;
+  --app-bg: #f7f9fb;
+  --app-bg-2: #eef2f6;
+  --ink: #22303c;
+  --ink-2: #5b6b78;
+  --ink-3: #8d9aa5;
+  --line: #dde5ec;
+  --line-2: #c4d0da;
+  --card: #ffffff;
+  --card-2: #f9fbfd;
+  --accent: #2f6b8f;
+  --accent-ink: #ffffff;
+  --now: #d1495b;
+  --block-bg: 30% 42%;
+  --block-line-alpha: .5;
+  --head-bg: #eef3f8;
+  --shadow-app: 0 18px 60px rgba(40, 60, 80, .18);
+  --shadow-block: 0 1px 2px rgba(50, 70, 90, .10);
+  --radius: 12px;
+  --radius-block: 8px;
+  --radius-chip: 8px;
+  --theme-color: #eef2f6;
+}
+/* ④ 活力 · 高饱和 —— 一眼分清课 */
+html[data-theme="vivid"] {
+  --page-bg: #ecf0f7;
+  --app-bg: #ffffff;
+  --app-bg-2: #f5f7fc;
+  --ink: #101828;
+  --ink-2: #475467;
+  --ink-3: #8b95a7;
+  --line: #e6eaf2;
+  --line-2: #ccd4e2;
+  --card: #ffffff;
+  --card-2: #fafbff;
+  --accent: #5b5bd6;
+  --accent-ink: #ffffff;
+  --now: #e0483d;
+  --block-bg: 52% 52%;
+  --block-line-alpha: .9;
+  --head-bg: #f3f5fb;
+  --shadow-app: 0 18px 60px rgba(60, 70, 110, .16);
+  --shadow-block: 0 2px 6px rgba(60, 70, 110, .10);
+  --radius: 16px;
+  --radius-block: 10px;
+  --radius-chip: 999px;
+  --theme-color: #f5f7fc;
+}
+
+/* ============================== 3 套字体 ============================== */
+
+/* 系统字体：iOS/安卓都自带的黑体，最稳，中文最好看 */
+html[data-font="system"] {
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC",
+             "HarmonyOS Sans SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-num: ui-rounded, "SF Pro Rounded", "PingFang SC", system-ui, sans-serif;
+  --font-let: -0.01em;
+}
+/* 黑体：字重更粗一点，小字在手机上更清楚 */
+html[data-font="hei"] {
+  --font-ui: "PingFang SC", "Heiti SC", "Microsoft YaHei", "Noto Sans CJK SC",
+             "Source Han Sans SC", sans-serif;
+  --font-num: "SF Mono", "PingFang SC", ui-monospace, monospace;
+  --font-let: 0;
+}
+/* 宋体：带点书卷气，字号会显得小一点 */
+html[data-font="serif"] {
+  --font-ui: "Songti SC", "STSong", "SimSun", "Noto Serif SC", "Source Han Serif SC", serif;
+  --font-num: "Times New Roman", "Songti SC", serif;
+  --font-let: .01em;
+}
+
+/* ================================ 骨架 ================================ */
+
+.phone {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
+  background: var(--app-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  letter-spacing: var(--font-let);
+}
+
+@media (min-width: 560px) and (min-height: 620px) {
+  body { align-items: center; padding: 18px 0; }
+  .phone {
+    height: min(880px, calc(100dvh - 36px));
+    border-radius: 26px;
+    box-shadow: var(--shadow-app);
+    border: 1px solid var(--line-2);
+  }
+}
+
+/* 存不下数据的警告条 */
+.warn {
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  z-index: 90;
+  background: #d92d20;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: calc(8px + env(safe-area-inset-top)) 14px 8px;
+  text-align: center;
+}
+
+/* ================================ 顶部 ================================ */
+
+.hd {
+  padding: 12px 16px 10px;
+  background: var(--app-bg);
+  border-bottom: 1px solid var(--line);
+}
+.hd-row { display: flex; align-items: flex-start; gap: 10px; }
+.hd-title { flex: 1 1 auto; min-width: 0; }
+.hd h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.hd-sub {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icon-btn {
+  flex: 0 0 auto;
+  width: 40px; height: 40px;
+  border-radius: var(--radius-chip);
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+.icon-btn:active { transform: scale(.94); }
+
+/* 实时状态条 */
+.ticker {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border-radius: var(--radius);
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  min-height: 38px;
+}
+.ticker.is-live {
+  background: color-mix(in srgb, var(--now) 12%, var(--card-2));
+  border-color: color-mix(in srgb, var(--now) 45%, var(--line));
+}
+.tk-dot {
+  flex: 0 0 auto;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ink-3);
+}
+.ticker.is-live .tk-dot {
+  background: var(--now);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--now) 60%, transparent);
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--now) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.tk-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ticker.is-live .tk-text { color: var(--ink); font-weight: 600; }
+.tk-prog {
+  flex: 0 0 54px;
+  height: 4px;
+  border-radius: 3px;
+  background: var(--line-2);
+  overflow: hidden;
+}
+.tk-prog i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  background: var(--now);
+  transition: width .3s linear;
+}
+
+/* ============================== 周次导航 ============================== */
+
+.wk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--app-bg-2);
+  border-bottom: 1px solid var(--line);
+}
+.wk-btn {
+  flex: 0 0 auto;
+  width: 38px; height: 38px;
+  border-radius: var(--radius-chip);
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.wk-btn:active { transform: scale(.94); }
+.wk-btn:disabled { opacity: .35; }
+.wk-mid {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  /* 注意：这里刻意不留 flex-wrap:wrap。折行会把这 55px 的导航条顶高，
+     宋体下"第 3 周 · 本周 10/5 – 10/11"就会断成两行（截图里抓到过）。
+     放不下的处理办法是让文件名那一截被压缩/裁掉，不是换行。 */
+  /* 不换行：宋体比系统字体宽，"第 3 周 · 本周" + "10/5 – 10/11" 挤不下时
+     会断成两行，把整条导航挤高。宁可溢出也不折行。 */
+  white-space: nowrap;
+  overflow: hidden;
+}
+.wk-now { display: flex; align-items: baseline; gap: 7px; white-space: nowrap; min-width: 0; }
+/* 周次是这一条里最重要的信息：放不下时缩小字号、再挤就裁掉尾巴，但绝不折行 */
+.wk-now strong {
+  font-size: clamp(13px, 4.2vw, 16px);
+  font-weight: 700;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* 日期那一截最次要：实在挤不下就把它整段收掉，也不能把周次截成半截。
+   什么时候"实在挤不下"由 JS 量真实宽度决定（见 fitWeekDate）——
+   宋体比系统字体宽，光靠 CSS 媒体查询猜不准。 */
+.wk-now span { font-size: 11.5px; color: var(--ink-3); flex: 0 0 auto; white-space: nowrap; }
+.wk.no-date .wk-now span { display: none; }
+.wk-back {
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: var(--radius-chip);
+  cursor: pointer;
+}
+.wk.is-current .wk-back { display: none; }
+
+/* ================================ 课表 ================================ */
+
+.board {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--app-bg);
+  padding-bottom: 6px;
+}
+
+.board-inner {
+  /* --hourH 是"一小时多高"，格子高度全部由它推出来 */
+  --hourH: 64px;
+  --railW: 40px;
+  --colW: 1fr;
+  --fs: 1;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--railW) [days] repeat(var(--dayCount, 5), minmax(0, 1fr));
+  grid-template-rows: 46px var(--gridH);
+  /* 12:00 的间隔也算进去：08:00 → 20:55 = 12h55m = 12.9167h */
+  --gridH: calc(var(--hourH) * 12.9167);
+}
+.board-inner.show-weekend { --railW: 34px; }
+
+.corner {
+  grid-column: 1;
+  grid-row: 1;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  background: var(--head-bg);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.dayhead {
+  grid-column: 2 / -1;
+  grid-row: 1;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(var(--dayCount, 5), minmax(0, 1fr));
+  background: var(--head-bg);
+  border-bottom: 1px solid var(--line);
+}
+.dh {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-right: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+.dh:last-child { border-right: 0; }
+.dh b { font-weight: 600; font-size: 12.5px; color: var(--ink); }
+.dh small { font-size: 9.5px; color: var(--ink-3); }
+.dh.is-today {
+  background: color-mix(in srgb, var(--now) 9%, var(--head-bg));
+}
+.dh.is-today b { color: var(--now); }
+.dh.is-weekend { background: color-mix(in srgb, var(--ink-3) 7%, var(--head-bg)); }
+
+/* 时间轴 */
+.rail {
+  grid-column: 1;
+  grid-row: 2;
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: var(--app-bg-2);
+  border-right: 1px solid var(--line);
+}
+.rt {
+  position: absolute;
+  right: 5px;
+  transform: translateY(-50%);
+  font-family: var(--font-num);
+  font-size: 9.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.rt-h {
+  position: absolute;
+  left: 0; right: 0;
+  border-top: 1px dashed var(--line);
+}
+
+/* 网格 + 课程块 */
+.grid {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--dayCount, 5), minmax(0, 1fr));
+}
+.gcol { position: relative; border-right: 1px solid var(--line); }
+.gcol:last-child { border-right: 0; }
+.gcol.is-weekend { background: color-mix(in srgb, var(--ink-3) 5%, transparent); }
+.gline {
+  position: absolute;
+  left: 0; right: 0;
+  border-top: 1px dashed var(--line);
+  pointer-events: none;
+}
+
+/* —— 一节课 —— */
+.blk {
+  position: absolute;
+  left: calc(var(--col) * (100% / var(--cols)) + 2px);
+  width: calc(100% / var(--cols) - 4px);
+  top: calc(var(--top) * 1%);
+  height: calc(var(--h) * 1% - 3px);
+  padding: 5px 6px;
+  border-radius: var(--radius-block);
+  background: var(--blk-bg);
+  color: var(--blk-ink);
+  border: 1px solid var(--blk-line);
+  border-left: 3px solid var(--blk-edge);
+  box-shadow: var(--shadow-block);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-ui);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.blk:active { transform: scale(.985); }
+.blk-name {
+  font-size: calc(var(--fs) * 11.5px);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: 0;
+  /* 最多两行，超了就省略号 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.blk-meta {
+  font-family: var(--font-num);
+  font-size: calc(var(--fs) * 9.5px);
+  line-height: 1.28;
+  opacity: .88;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.blk-room {
+  font-size: calc(var(--fs) * 9.5px);
+  line-height: 1.25;
+  opacity: .78;
+  margin-top: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 格子矮的时候（比如只有一节课）藏掉次要信息，别挤成一坨 */
+.blk.is-tight .blk-meta { display: none; }
+.blk.is-tiny .blk-name { -webkit-line-clamp: 1; }
+.blk.is-tiny .blk-room { display: none; }
+.blk.is-past { opacity: .45; }
+.blk.is-now {
+  border-color: var(--now);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--now) 45%, transparent), var(--shadow-block);
+}
+.blk.is-now::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--now) 8%, transparent);
+  pointer-events: none;
+}
+.blk-badge {
+  position: absolute;
+  top: 3px; right: 3px;
+  font-size: 8.5px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--now);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+/* 现在这条时间线 */
+.nowline {
+  position: absolute;
+  left: var(--railW);
+  right: 0;
+  z-index: 3;
+  border-top: 2px solid var(--now);
+  pointer-events: none;
+}
+.nowline-tag {
+  position: absolute;
+  right: 3px;
+  top: -9px;
+  font-family: var(--font-num);
+  font-size: 9px;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: var(--now);
+  color: #fff;
+}
+
+/* 空周 */
+.empty {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ======================== 视图一：明细列表（手机主视图） ========================
+ * 390px 宽的格子里每列只剩 70px，课名和地点一定会被截。
+ * 列表视图一门课一行，课名/节次/时间/地点都写得全 —— 这是手机上真正能读的视图。
+ */
+
+.vt {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-chip);
+  background: var(--card-2);
+  border: 1px solid var(--line-2);
+}
+.vt-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 9px;
+  border-radius: var(--radius-chip);
+  cursor: pointer;
+  line-height: 1.2;
+}
+.vt-btn.is-on {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--app-bg);
+  padding: 10px 12px 14px;
+  scrollbar-gutter: stable;
+}
+
+.lp-day {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 12px 2px 7px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-2);
+  letter-spacing: .01em;
+}
+.lp-day:first-child { margin-top: 2px; }
+.lp-day.is-today { color: var(--now); }
+.lp-date {
+  font-family: var(--font-num);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.lp-tag {
+  margin-left: auto;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--now);
+  background: color-mix(in srgb, var(--now) 12%, transparent);
+  border-radius: 999px;
+  padding: 1.5px 7px;
+}
+
+/* 今天没课时的占位（不然页面一片空白，看不出是没课还是坏了） */
+.lp-free {
+  margin: 0 2px 4px;
+  padding: 14px 12px;
+  border: 1px dashed var(--line-2);
+  border-radius: 13px;
+  font-size: 12px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.lp {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 9px 11px 9px 10px;
+  border-radius: var(--radius);
+  /* --blk-bg / --blk-ink / --blk-edge 都是按主题算好的课程色：
+     底色偏浅，所以正文一律用课程自己的深色字，不能跟着页面的 --ink 走
+     （午夜主题下 --ink 是浅色，会浅字压浅底，什么都看不见）。 */
+  background: var(--blk-bg, var(--card));
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--blk-edge, var(--line-2));
+  box-shadow: var(--shadow-block);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-ui);
+  color: var(--blk-ink, var(--ink));
+  transition: transform .12s ease;
+}
+.lp:active { transform: scale(.988); }
+.lp.is-now {
+  border-color: var(--now);
+  border-left-color: var(--blk-edge, var(--now));
+  background: color-mix(in srgb, var(--now) 34%, var(--blk-bg, var(--card)));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--now) 38%, transparent), var(--shadow-block);
+}
+.lp.is-past { opacity: .5; }
+.lp-live {
+  position: absolute;
+  top: 7px; right: 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--now);
+  color: #fff;
+  letter-spacing: .02em;
+}
+
+/* 左边那条"节次 + 起止时间" */
+.lp-when {
+  flex: 0 0 58px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: 1px;
+}
+.lp-sec {
+  font-family: var(--font-num);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--blk-edge, var(--ink-2));
+  white-space: nowrap;
+}
+.lp-hm {
+  font-family: var(--font-num);
+  font-size: 9.5px;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--blk-ink, var(--ink-2)) 62%, transparent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lp-main { flex: 1 1 auto; min-width: 0; }
+.lp-name {
+  font-size: calc(var(--fs) * 14px);
+  font-weight: 700;
+  line-height: 1.28;
+  word-break: break-word;
+}
+/* 右上角有"正在上"角标时，给课名让出位置，别被压住 */
+.lp.is-now .lp-name { padding-right: 52px; }
+.lp-sub {
+  margin-top: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 7px;
+  font-size: calc(var(--fs) * 11.5px);
+  line-height: 1.4;
+  /* 跟 .lp 的 --blk-ink 走：午夜主题的底色是浅色、--ink-2 也是浅色，
+     直接用 var(--ink-2) 会浅字压浅底。这里统一按"块自己的字色"淡化。 */
+  color: color-mix(in srgb, var(--blk-ink, var(--ink-2)) 74%, transparent);
+}
+.lp-room { font-weight: 600; }
+.lp-room::before {
+  content: "📍";
+  font-size: 10px;
+  margin-right: 3px;
+  opacity: .85;
+}
+.lp-teach { color: color-mix(in srgb, var(--blk-ink, var(--ink-2)) 62%, transparent); }
+
+/* 列表里的空周提示 */
+.list .empty { min-height: 160px; }
+
+.hint {
+  margin: 0;
+  padding: 7px 16px calc(9px + env(safe-area-inset-bottom));
+  font-size: 11px;
+  color: var(--ink-3);
+  background: var(--app-bg-2);
+  border-top: 1px solid var(--line);
+  min-height: 30px;
+}
+
+/* ================================ 底栏 ================================ */
+
+.ft {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 16px calc(6px + env(safe-area-inset-bottom));
+  font-size: 9.5px;
+  color: var(--ink-3);
+  background: var(--app-bg-2);
+}
+
+/* ============================== 设置抽屉 ============================== */
+
+.sheet-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(12, 12, 16, .42);
+  backdrop-filter: blur(2px);
+}
+.sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 61;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  max-height: 88dvh;
+  overflow: auto;
+  background: var(--app-bg);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--line-2);
+  box-shadow: 0 -14px 40px rgba(0, 0, 0, .28);
+  padding: 8px 16px calc(20px + env(safe-area-inset-bottom));
+  animation: sheet-up .22s ease-out;
+}
+@keyframes sheet-up { from { transform: translateY(14px); opacity: .5; } to { transform: none; opacity: 1; } }
+.sheet-grab {
+  width: 38px; height: 4px;
+  border-radius: 3px;
+  background: var(--line-2);
+  margin: 4px auto 10px;
+}
+.sheet h2 { margin: 0 0 12px; font-size: 15px; }
+.set-block { margin-bottom: 16px; }
+.set-label {
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.set-val { color: var(--ink-3); font-weight: 400; font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-chip);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+}
+.chip.is-on {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 13%, var(--card));
+  color: var(--ink);
+  font-weight: 600;
+}
+.chip .swatch {
+  width: 13px; height: 13px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, .18);
+}
+.fs-row { display: flex; align-items: center; gap: 10px; }
+.fs-btn {
+  flex: 0 0 auto;
+  min-width: 46px;
+  padding: 8px 10px;
+  border-radius: var(--radius-chip);
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+.fs-range { flex: 1 1 auto; accent-color: var(--accent); }
+.set-note { margin: 7px 0 0; font-size: 10.5px; color: var(--ink-3); line-height: 1.5; }
+.switch { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+.switch input { width: 20px; height: 20px; accent-color: var(--accent); }
+.key-row { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.key-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--ink-2); }
+.key-item i { width: 11px; height: 11px; border-radius: 3px; display: block; }
+
+/* ---------------------------------------------------- 设置备份 / 恢复 --- */
+.bk-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.bk-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 11px;
+  background: var(--card-2);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bk-btn:active { background: var(--card); }
+.bk-btn-soft { background: transparent; }
+.bk-btn-danger { border-color: color-mix(in srgb, var(--now) 45%, var(--line-2)); color: var(--now); }
+.bk-text {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 11px;
+  background: var(--card-2);
+  color: var(--ink);
+  font-size: 11px;
+  font-family: var(--font-num);
+  line-height: 1.45;
+  resize: vertical;
+}
+.bk-text::placeholder { color: var(--ink-3); font-family: var(--font-ui); }
+.bk-msg {
+  margin: 9px 0 0;
+  padding: 9px 10px;
+  border-radius: 11px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.bk-msg.is-good {
+  background: color-mix(in srgb, #2f9e6b 16%, transparent);
+  color: color-mix(in srgb, #2f9e6b 82%, var(--ink));
+}
+.bk-msg.is-bad {
+  background: color-mix(in srgb, var(--now) 14%, transparent);
+  color: color-mix(in srgb, var(--now) 78%, var(--ink));
+}
+
+.sheet-done {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+
+/* ============================== 课程详情 ============================== */
+
+.detail-mask { position: fixed; inset: 0; z-index: 70; background: rgba(12, 12, 16, .42); }
+.detail {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 71;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--app-bg);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 4px solid var(--blk-edge, var(--accent));
+  box-shadow: 0 -14px 40px rgba(0, 0, 0, .28);
+  padding: 16px 18px calc(20px + env(safe-area-inset-bottom));
+  animation: sheet-up .2s ease-out;
+}
+.dt-name { margin: 0 0 3px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+.dt-code { font-family: var(--font-num); font-size: 11px; color: var(--ink-3); margin-bottom: 12px; }
+.dt-rows { display: grid; gap: 9px; }
+.dt-row { display: flex; gap: 10px; font-size: 13.5px; align-items: baseline; }
+.dt-k { flex: 0 0 62px; color: var(--ink-3); font-size: 12px; }
+.dt-v { flex: 1 1 auto; font-weight: 600; }
+.dt-v small { font-weight: 400; color: var(--ink-3); }
+.dt-close {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+
+/* ============================== 小屏微调 ============================== */
+
+@media (max-width: 340px) {
+  /* 只有到 340px 才舍日期：真机 390px 下"第 3 周 · 本周"+"10/5 – 10/11"
+     一起排得下（CDP 量过：103px + 60px，可用 170px），390px 上收掉日期是白白丢信息。 */
+  .wk-now span { display: none; }
+}
+@media (max-width: 360px) {
+  .board-inner { --hourH: 58px; --railW: 34px; }
+  .hd h1 { font-size: 18px; }
+  .tk-text { font-size: 12px; }
+  .wk-now strong { font-size: 14px; }
+  .wk-btn { width: 34px; height: 34px; font-size: 18px; }
+}
+
+/* 尊重系统的"减少动效" */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .board { scroll-behavior: auto !important; }
+}

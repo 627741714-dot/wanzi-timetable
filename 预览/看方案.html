@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>课表方案预览 · 我的课表</title>
+<style>
+  :root { --ink: #2f2a25; --ink-2: #6b6156; --ink-3: #9a8f81; --line: #e2d7c7; --bg: #fbf6ee; --accent: #b4553a; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 26px 18px 60px;
+    background: #e7ded1;
+    color: var(--ink);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 { margin: 0 0 4px; font-size: 22px; }
+  .lead { margin: 0 0 22px; color: var(--ink-2); font-size: 13.5px; line-height: 1.7; }
+  h2 {
+    margin: 30px 0 4px; font-size: 16px;
+    padding-bottom: 7px; border-bottom: 1px solid #cdbfa9;
+  }
+  .note { margin: 0 0 14px; color: var(--ink-2); font-size: 12.5px; line-height: 1.7; }
+  .row { display: flex; gap: 16px; overflow-x: auto; padding: 4px 2px 14px; }
+  figure { margin: 0; flex: 0 0 auto; }
+  figure img {
+    display: block;
+    width: 390px;
+    border-radius: 12px;
+    border: 1px solid #cfc0ab;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(80, 60, 40, .18);
+  }
+  figcaption { margin-top: 7px; font-size: 12px; color: var(--ink-2); }
+  figcaption b { color: var(--ink); }
+  .pick { margin-top: 34px; padding: 14px 16px; background: #fbf6ee; border: 1px solid #cfc0ab; border-radius: 12px; font-size: 13.5px; line-height: 1.85; }
+  .pick b { color: var(--accent); }
+  code { background: #efe6d8; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>我的课表 · 方案预览</h1>
+<p class="lead">
+  北京理工大学 2026-2027 学年第一学期<br>
+  都是按 iPhone 真实宽度 <b>390px</b> 用无头浏览器实拍出来的，不是设计稿。<br>
+  当前时间：2026-10-10（第 3 周末，周六没课）。<br>
+  <span style="color:#b4553a">你已拍板：默认用<b>列表</b>、配色用<b>活力</b>、列表里那行"第几周到第几周"<b>不要</b>。这一页已经按你的选择重新拍过了。</span>
+</p>
+
+<h2>方案 A · 列表视图（现在默认就是这个）</h2>
+<p class="note">
+  一门课一行，你要的四样信息全写全了：<b>课名 / 第几节 / 几点到几点 / 地点</b>（周次挪到点开后的详情里）。<br>
+  字大、不用放大镜；缺点是看不出"一天里课和课之间的空档有多长"。
+</p>
+<div class="row">
+  <figure><img src="01-列表-活力-本周.png" alt="活力列表（默认）"><figcaption><b>① 活力</b> —— 你选的，也是现在的默认</figcaption></figure>
+  <figure><img src="03-列表-午夜.png" alt="午夜列表"><figcaption><b>② 午夜</b> —— 夜里看不刺眼</figcaption></figure>
+  <figure><img src="04-列表-北欧.png" alt="北欧列表"><figcaption><b>③ 北欧</b> —— 干净冷淡</figcaption></figure>
+  <figure><img src="05-列表-活力.png" alt="活力列表"><figcaption><b>④ 活力</b> · 正在上课时的样子</figcaption></figure>
+</div>
+
+<h2>方案 B · 格子视图（点右上"格子"切过去）</h2>
+<p class="note">
+  就是传统课表，一眼看整周哪天满、哪节空。<br>
+  <b>但 390px 宽下五列每列只剩 70px，课名和地点必然被截断</b> —— 手机上只能看个形状，要看全得点开。
+</p>
+<div class="row">
+  <figure><img src="20-格子-纸感-本周.png" alt="纸感格子"><figcaption><b>纸感</b> · 第 3 周整周</figcaption></figure>
+  <figure><img src="22-格子-午夜.png" alt="午夜格子"><figcaption><b>午夜</b> · 正在上课（红线是"现在"）</figcaption></figure>
+  <figure><img src="23-格子-活力.png" alt="活力格子"><figcaption><b>活力</b></figcaption></figure>
+  <figure><img src="24-格子-带周末.png" alt="带周末"><figcaption><b>带周末</b> · 打开开关后多两列</figcaption></figure>
+</div>
+
+<h2>细节 · 实时高亮 / 翻周 / 设置</h2>
+<div class="row">
+  <figure><img src="02-列表-正在上课.png" alt="正在上课"><figcaption>正在上的课会亮起来 + 右上角"正在上"角标</figcaption></figure>
+  <figure><img src="09-列表-晚上.png" alt="晚上"><figcaption>晚上 19:00：晚间课高亮</figcaption></figure>
+  <figure><img src="08-列表-第一周.png" alt="第一周"><figcaption>翻到第 1 周：军训周之后的第一次课</figcaption></figure>
+  <figure><img src="13-列表-放假日.png" alt="放假"><figcaption>翻到第 17 周：自动提示已放假</figcaption></figure>
+  <figure><img src="10-外观设置.png" alt="设置"><figcaption>外观：4 套配色 × 3 套字体 × 字号，还能切默认视图</figcaption></figure>
+  <figure><img src="12-列表-期末周.png" alt="期末周"><figcaption>翻到第 16 周：只剩 5 节课</figcaption></figure>
+</div>
+
+<div class="pick">
+  <b>你已确认的三件事（已生效）：</b><br>
+  ① 默认首页 = <b>列表</b>。<br>
+  ② 配色 = <b>活力</b>（<code>data-theme="vivid"</code>，也同步改了 iPhone 状态栏颜色）。<br>
+  ③ 列表里那行"第1–11周 · 每周 3 小节" = <b>去掉</b>。周次现在只在点开课程后的详情里出现。<br>
+  <br>
+  验收（改完重跑，全绿）：逻辑测试 <b>329/329</b>、界面测试 <b>259/259</b>、交付自检 <b>67/67</b>、
+  截图自检 <b>19/19</b>，单文件版 <code>北理工课表-单文件版.html</code> 与 Pages 用的 <code>index.html</code>
+  各 <b>89.5 KB</b>、外部引用 0。<br>
+  <br>
+  后来又修了三处：<b>设置备份/恢复</b>加好了（抽屉最下面）；<b>换字体后导航条把"第 3 周 · 本周"截掉</b>
+  （宋体/黑体比系统字体宽，现在换字体时会重新量一遍，放不下就收掉日期、绝不留半截字）；
+  列表里<b>今天没课也会明说</b>（"今天一节课都没有，好好休息"），不再是空白一片。<br>
+  <br>
+  README 也写好了（含 iOS 安装步骤和这一路踩过的坑）。<br>
+  <br>
+  剩下最后一步：<b>传 GitHub Pages</b>（需要一个 GitHub 账号 + 一个仓库）。
+</div>
+
+</body>
+</html>

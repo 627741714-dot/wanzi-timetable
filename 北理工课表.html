@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="vivid" data-font="system">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>我的课表 · 北理工 2026秋</title>
+
+<!-- iPhone 加到主屏幕：全屏、有名字、有图标 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="我的课表">
+<meta name="theme-color" content="#f5f7fc">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+<!-- 存不下设置时的警告条（绝对不许静默降级） -->
+<div id="storageWarn" class="warn" hidden></div>
+
+<div class="phone">
+
+  <header class="hd">
+    <div class="hd-row">
+      <div class="hd-title">
+        <h1>我的课表</h1>
+        <p class="hd-sub" id="hdSub">2026-2027学年 第一学期</p>
+      </div>
+      <button id="btnTheme" class="icon-btn" type="button" aria-label="切换配色">🎨</button>
+    </div>
+
+    <!-- 实时状态条 -->
+    <div class="ticker" id="ticker">
+      <span class="tk-dot" id="tkDot"></span>
+      <span class="tk-text" id="tkText">正在读取时间…</span>
+      <span class="tk-prog" id="tkProg" hidden><i id="tkProgBar"></i></span>
+    </div>
+  </header>
+
+  <!-- 周次导航 -->
+  <nav class="wk" aria-label="切换周次">
+    <button class="wk-btn" id="wkPrev" type="button" aria-label="上一周">‹</button>
+    <div class="wk-mid">
+      <div class="wk-now">
+        <strong id="wkLabel">第 3 周</strong>
+        <span id="wkRange">10/5 – 10/11</span>
+      </div>
+      <button class="wk-back" id="wkBack" type="button" hidden>回到本周</button>
+    </div>
+    <div class="vt" role="group" aria-label="切换视图">
+      <button class="vt-btn" id="vtList" type="button">列表</button>
+      <button class="vt-btn" id="vtGrid" type="button">格子</button>
+    </div>
+    <button class="wk-btn" id="wkNext" type="button" aria-label="下一周">›</button>
+  </nav>
+
+  <!-- 视图一：明细列表（手机上看得全：课名 / 第几节 / 几点到几点 / 地点；周次在点开的详情里） -->
+  <div class="list" id="list" role="list"></div>
+
+  <!-- 视图二：主课表（星期表头 + 时间轴 + 网格） -->
+  <div class="board" id="board" hidden>
+    <div class="board-inner" id="boardInner">
+      <div class="corner" id="corner"><span>节</span></div>
+      <div class="dayhead" id="dayHead"></div>
+      <div class="rail" id="rail"></div>
+      <div class="grid" id="grid"></div>
+      <div class="nowline" id="nowLine" hidden><span class="nowline-tag">现在</span></div>
+    </div>
+  </div>
+
+  <p class="hint" id="hint"></p>
+
+  <!-- 设置抽屉 -->
+  <div class="sheet-mask" id="sheetMask" hidden></div>
+  <section class="sheet" id="sheet" hidden aria-label="外观设置">
+    <div class="sheet-grab"></div>
+    <h2>外观</h2>
+
+    <div class="set-block">
+      <div class="set-label">配色</div>
+      <div class="chips" id="themeChips"></div>
+    </div>
+
+    <div class="set-block">
+      <div class="set-label">字体</div>
+      <div class="chips" id="fontChips"></div>
+    </div>
+
+    <div class="set-block">
+      <div class="set-label">字号 <span class="set-val" id="fsVal">100%</span></div>
+      <div class="fs-row">
+        <button class="fs-btn" id="fsMinus" type="button">A−</button>
+        <input class="fs-range" id="fsRange" type="range" min="85" max="140" step="5" value="100" aria-label="字号">
+        <button class="fs-btn" id="fsPlus" type="button">A+</button>
+      </div>
+    </div>
+
+    <div class="set-block">
+      <div class="set-label">默认视图</div>
+      <div class="chips" id="viewChips"></div>
+      <p class="set-note">列表：一门课一行，课名/节次/时间/地点都写得全。格子：整周时间轴，一眼看哪天满。</p>
+    </div>
+
+    <div class="set-block">
+      <label class="switch">
+        <input type="checkbox" id="swWeekend">
+        <span>显示周六周日</span>
+      </label>
+      <p class="set-note">课表里原本没有周末的课，打开后只是多两列空白。</p>
+    </div>
+
+    <div class="set-block">
+      <div class="key-row" id="keyRow"></div>
+    </div>
+
+    <div class="set-block">
+      <div class="set-label">备份设置</div>
+      <p class="set-note">
+        把外观设置（配色 / 字体 / 字号 / 默认视图 / 周末）存成一个文件，换手机或者清过 Safari 数据之后能一键弄回来。
+      </p>
+      <div class="bk-row">
+        <button class="bk-btn" id="bkExport" type="button">导出文件</button>
+        <button class="bk-btn" id="bkCopy" type="button">复制到剪贴板</button>
+      </div>
+      <textarea class="bk-text" id="bkText" rows="3"
+        placeholder="把备份内容粘贴到这里，然后点下面的「合并恢复」或「完全替换」"></textarea>
+      <div class="bk-row">
+        <button class="bk-btn bk-btn-soft" id="bkPick" type="button">选文件…</button>
+        <button class="bk-btn" id="bkMerge" type="button">合并恢复</button>
+        <button class="bk-btn bk-btn-danger" id="bkReplace" type="button">完全替换</button>
+      </div>
+      <input type="file" id="bkFile" accept=".json,application/json" hidden>
+      <p class="bk-msg" id="bkMsg" hidden></p>
+    </div>
+
+    <button class="sheet-done" id="sheetDone" type="button">完成</button>
+  </section>
+
+  <!-- 点格子看完整信息 -->
+  <div class="detail-mask" id="detailMask" hidden></div>
+  <div class="detail" id="detail" hidden></div>
+
+  <footer class="ft">
+    <span>作息 08:00–20:55 · 数据来自教务 PDF</span>
+  </footer>
+</div>
+
+<script src="src/data.js"></script>
+<script src="src/course-core.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
