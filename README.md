@@ -137,9 +137,23 @@ node tools/shots.mjs        :: 实拍 19 张截图到 预览/（顺带自检导�
 
 ## 手机安装（iOS）
 
+**线上地址（已部署）**：<https://627741714-dot.github.io/wanzi-timetable/>
+
 1. 先在电脑上 `启动手机访问.bat`，手机 Safari 打开那个局域网地址，确认能看到课表。
 2. 传到 GitHub Pages 之后，用 Safari 打开 Pages 地址 → 点「分享」→「添加到主屏幕」。
 3. 图标和名字都配好了（`apple-touch-icon`、`apple-mobile-web-app-title`），打开就是全屏，没有浏览器地址栏。
+
+### 重新部署
+
+改完代码之后：
+
+```bat
+node tools/build-single.mjs   :: 一定先打包，否则推上去的还是旧的 index.html
+node tools/check-dist.mjs     :: 确认产物没问题
+git add -A && git commit -m "改了啥" && git push
+```
+
+Pages 会自动重新发布（大约半分钟到几分钟）。
 
 ### 三个一定会遇到的坑
 
